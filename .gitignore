@@ -1,0 +1,40 @@
+# Ignorar diretório node_modules gerado pelo npm
+node_modules/
+
+# Ignorar arquivos gerados pela compilação TypeScript
+dist/
+*.js
+*.js.map
+
+# Ignorar arquivos de teste
+__tests__/
+test/
+tests/
+*.test.*
+*.spec.*
+
+# Ignorar logs e arquivos temporários
+*.log
+*.swp
+*.swo
+*.swn
+*.swo
+*.swm
+
+# Ignorar arquivos de configuração do Visual Studio Code
+.vscode/
+
+# Ignorar arquivos de configuração do IntelliJ IDEA
+.idea/
+
+# Ignorar arquivos gerados pelo sistema de empacotamento (por exemplo, Parcel, Webpack)
+*.parcel-cache/
+*.cache/
+dist/
+build/
+out/
+
+# Ignorar arquivos relacionados ao gerenciamento de dependências
+package-lock.json
+yarn.lock
+npm-debug.log
