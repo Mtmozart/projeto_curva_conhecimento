@@ -10,8 +10,7 @@ dist/
 __tests__/
 test/
 tests/
-*.test.*
-*.spec.*
+
 
 # Ignorar logs e arquivos temporários
 *.log
