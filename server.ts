@@ -1,6 +1,5 @@
 import app from "./src/app";
 
-
 const PORTA = 3333;
 
 app.listen(PORTA, () => {
