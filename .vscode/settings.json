@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
     "uuidv"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
