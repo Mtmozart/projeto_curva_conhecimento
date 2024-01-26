@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import SpacedRepetition from "./SpacedRepetitionEntity";
+import SpacedRepetitionEntity from "./SpacedRepetitionEntity";
 
 @Entity()
 export default class UserEntity {
@@ -8,12 +10,12 @@ export default class UserEntity {
   name: string;
   @Column()
   email: string;
-
   @Column()
   password: string;
-
   @Column()
   permission_rules?: string;
+  @OneToMany(() => SpacedRepetitionEntity, (spacedRepetition) => spacedRepetition.user)
+  spacedRepetition?: SpacedRepetitionEntity[];
 
 
   constructor(name: string, email: string, password: string, permission_rules?: string) {
@@ -21,5 +23,6 @@ export default class UserEntity {
     this.email = email;
     this.password = password;
     this.permission_rules = permission_rules;
+
   }
 }
