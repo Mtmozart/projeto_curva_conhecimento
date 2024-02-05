@@ -5,7 +5,7 @@ import { AppDataSource } from "./config/dataSource";
 
 const app = express();
 app.use(express.json());
-app.use(router);
+router(app);
 
 
 AppDataSource.initialize().then(() => {

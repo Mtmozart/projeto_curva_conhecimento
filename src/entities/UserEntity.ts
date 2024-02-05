@@ -6,7 +6,7 @@ import PermissionRulesEntity from "./PermissionRulesEntity";
 @Entity()
 export default class UserEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
   @Column()
   name: string;
   @Column()
