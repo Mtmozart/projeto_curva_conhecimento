@@ -6,10 +6,12 @@ export default class UserRepository implements IUserRepository{
 
    private  repository:Repository<UserEntity>;
 
-   constructor(repository: Repository<UserEntity>){}
+   constructor(repository: Repository<UserEntity>){
+    this.repository = repository;
+   }
 
   async createUser(user: UserEntity): Promise<void> {
-    await this.repository.create(user);
+    await this.repository.save(user);
   }
 
 
