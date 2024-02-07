@@ -2,11 +2,14 @@ import { Request, Response } from 'express'
 import UserEntity from '../entities/UserEntity'
 import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
+import { VerificationPassword } from '../security/validations/VerificationPassword';
 
 
 export default class UserController {
 
-constructor(private userRepository: UserRepository){}
+constructor(private userRepository: UserRepository, private verification: VerificationPassword){
+
+}
 
 
 async createUser(req: Request, res: Response){
@@ -14,12 +17,14 @@ async createUser(req: Request, res: Response){
 
     const { name, email, password, confirmPassword } = <CreateUserDTO>req.body;
 
-    if(password != confirmPassword || password == null || confirmPassword == null){
-      return res.status(400).json({
-       error: "Senha ou confirmação de senha são inválidos ou em branco."
-      })
+    const dados:CreateUserDTO = {
+      name: name,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword
     }
 
+    this.verification.verificar(dados, res);
 
     const newUser: UserEntity = {
       name: name,
