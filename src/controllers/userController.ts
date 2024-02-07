@@ -7,41 +7,39 @@ import { VerificationPassword } from '../security/validations/VerificationPasswo
 
 export default class UserController {
 
-constructor(private userRepository: UserRepository, private verification: VerificationPassword){
+constructor(private userRepository: UserRepository, private verifications: VerificationPassword){
 
 }
 
 
-async createUser(req: Request, res: Response){
+async createUser(req: Request, res: Response) {
   try {
+    const dados: CreateUserDTO = req.body;
 
-    const { name, email, password, confirmPassword } = <CreateUserDTO>req.body;
+    let { success, message} = await this.verifications.verification(dados);
 
-    const dados:CreateUserDTO = {
-      name: name,
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword
+    if(!success){
+      return res.status(401).json({ message });
     }
 
-    this.verification.verificar(dados, res);
-
+    else{
     const newUser: UserEntity = {
-      name: name,
-      email: email,
-      password: password
-    }
+      name: dados.name,
+      email: dados.email,
+      password: dados.password
+    };
+
 
     await this.userRepository.createUser(newUser);
+
     return res.status(201).json({
       name: newUser.name,
       email: newUser.email
     });
-
+  }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ error: 'Erro ao criar o usuário' });
   }
-
 }
 }

@@ -3,5 +3,5 @@ import { Response } from "express";
 
 export default interface IVerification{
 
-  verificar (dados: CreateUserDTO, res: Response): void;
+  verification (dados: CreateUserDTO,): Promise<{success: boolean; message?: string}>;
 }
