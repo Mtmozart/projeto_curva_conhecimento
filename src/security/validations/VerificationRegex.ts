@@ -16,9 +16,12 @@ export class VerificationRegex implements IVerification{
     for (const key in dados) {
       if (Object.prototype.hasOwnProperty.call(dados, key)) {
         const value = dados[key as keyof CreateUserDTO];
-        if(regex.test(value)){
-          return { success: false, message: "Caracteres inválidos." };
+        if(!dados.email){
+          if(regex.test(value)){
+            return { success: false, message: "Caracteres inválidos." };
+          }
         }
+
       }
     }
     return { success: true };

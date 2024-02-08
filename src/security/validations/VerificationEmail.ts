@@ -17,11 +17,9 @@ import UserRepository from "../../repositories/UserRepository";
         return { success: false, message: "O e-mail é inválido." };
       }
 
-      if(!this.repository.findUserByEmail(dados.email)){
-        return { success: false, message: "E-mail já cadastrado." };
-      }
+      return { success: true}
 
-      return { success: true };
+
     }
 
 

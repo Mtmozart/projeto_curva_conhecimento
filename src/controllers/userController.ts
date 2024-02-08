@@ -17,14 +17,17 @@ async createUser(req: Request, res: Response) {
   try {
     const dados: CreateUserDTO = req.body;
 
-    const results= await Promise.all(this.verifications.map(verification => verification.verification(dados)));
+    const results = await Promise.all(this.verifications.map(verification => verification.verification(dados)));
 
-    const failedVerification = results.flat().find(result => !result.success);
-    const message = failedVerification.message;
+    const hasFailedVerification = results.some(result => !result.success);
 
-    if(!failedVerification.success){
+    if (hasFailedVerification) {
+      const failedVerification = results.find(result => !result.success);
+      const message = failedVerification?.message || "Erro durante a verificação.";
+
       return res.status(401).json({ message });
     }
+
 
     else{
     const newUser: UserEntity = {

@@ -14,14 +14,17 @@ export default class UserRepository implements IUserRepository{
       await this.repository.save(user);
     }
 
-    async findUserByEmail(email: string): Promise<UserEntity | undefined>{
-        const user: UserEntity = await this.repository.findOne({
+    async findUserByEmail(email: string): Promise<boolean>{
+        const user: UserEntity | undefined = await this.repository.findOne({
           where:{
             email: email
           }
         })
+        if(user){
+          return true
+        }
 
-      return user;
+      return false;
     }
 
 }
