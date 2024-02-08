@@ -3,12 +3,13 @@ import UserEntity from '../entities/UserEntity'
 import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
 import { VerificationPassword } from '../security/validations/VerificationPassword';
+import IVerification from '../security/validations/IValidations';
 
 
 export default class UserController {
 
-constructor(private userRepository: UserRepository, private verifications: VerificationPassword){
-
+constructor(private userRepository: UserRepository, private verifications: IVerification[]){
+this.verifications = verifications;
 }
 
 
@@ -16,9 +17,12 @@ async createUser(req: Request, res: Response) {
   try {
     const dados: CreateUserDTO = req.body;
 
-    let { success, message} = await this.verifications.verification(dados);
+    const results= await Promise.all(this.verifications.map(verification => verification.verification(dados)));
 
-    if(!success){
+    const failedVerification = results.flat().find(result => !result.success);
+    const message = failedVerification.message;
+
+    if(!failedVerification.success){
       return res.status(401).json({ message });
     }
 

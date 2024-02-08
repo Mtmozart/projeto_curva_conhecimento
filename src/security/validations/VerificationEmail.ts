@@ -1,16 +1,26 @@
   import CreateUserDTO from "../../DTO/userDTOs/CreateUserDTO";
+import UserRepository from "../../repositories/UserRepository";
   import IVerification from "./IValidations";
 
   export class VerificationEmail implements IVerification{
 
+    constructor(private repository: UserRepository){
+
+    }
+
     async verification(dados: CreateUserDTO): Promise<{ success: boolean; message?: string }> {
       if (dados.email === '' || dados.email === null) {
-        return { success: false, message: "O campo da senha está vazio." };
+        return { success: false, message: "O campo do email está vazio." };
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(dados.email)) {
-        return { success: false, message: "O e-mail enviado é inválido." };
+        return { success: false, message: "O e-mail é inválido." };
       }
+
+      if(!this.repository.findUserByEmail(dados.email)){
+        return { success: false, message: "E-mail já cadastrado." };
+      }
+
       return { success: true };
     }
 

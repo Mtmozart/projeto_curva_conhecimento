@@ -10,9 +10,18 @@ export default class UserRepository implements IUserRepository{
     this.repository = repository;
    }
 
-  async createUser(user: UserEntity): Promise<void> {
-    await this.repository.save(user);
-  }
+    async createUser(user: UserEntity): Promise<void> {
+      await this.repository.save(user);
+    }
 
+    async findUserByEmail(email: string): Promise<UserEntity | undefined>{
+        const user: UserEntity = await this.repository.findOne({
+          where:{
+            email: email
+          }
+        })
+
+      return user;
+    }
 
 }
