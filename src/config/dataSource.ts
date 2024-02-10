@@ -16,4 +16,6 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   entities: [UserEntity, SpacedRepetitionEntity,PermissionRulesEntity, PermissionEntity, RulesEntity], // Substitua isso com os caminhos corretos para suas entidades DB_NAME=nobaiwyk
   synchronize: true,
+
+ // logging: true,
 })

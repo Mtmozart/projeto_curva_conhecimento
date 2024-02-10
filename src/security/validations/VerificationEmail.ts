@@ -9,18 +9,28 @@ import UserRepository from "../../repositories/UserRepository";
     }
 
     async verification(dados: CreateUserDTO): Promise<{ success: boolean; message?: string }> {
-      if (dados.email === '' || dados.email === null) {
+      if (!dados.email || dados.email.trim() === '') {
         return { success: false, message: "O campo do email está vazio." };
       }
+
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(dados.email)) {
         return { success: false, message: "O e-mail é inválido." };
       }
 
-      return { success: true}
 
 
-    }
+      const userAlreadyExist = await this.repository.findUserByEmail(dados.email);
+
+      if (userAlreadyExist.success === true) {
+        return { success: false, message: "E-mail já cadastrado." };
+      }
+
+
+      return { success: true };
+
+        }
+
 
 
   }

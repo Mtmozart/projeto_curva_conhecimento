@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import SpacedRepetition from "./SpacedRepetitionEntity";
 import SpacedRepetitionEntity from "./SpacedRepetitionEntity";
 import PermissionRulesEntity from "./PermissionRulesEntity";
@@ -13,10 +13,10 @@ export default class UserEntity {
   email: string;
   @Column()
   password: string;
-  @ManyToMany(() => PermissionRulesEntity, {nullable: true, cascade: true, eager: true })
-  @JoinColumn()
+ @ManyToMany(() => PermissionRulesEntity, {nullable: true, cascade: true, eager: true })
+  @JoinTable()
   permission_rules?: PermissionRulesEntity;
-  @OneToMany(() => SpacedRepetitionEntity, (spacedRepetition) => spacedRepetition.user)
+  @OneToMany(() => SpacedRepetitionEntity, (spacedRepetition) => spacedRepetition.user, {nullable: true, cascade: true, eager: true })
   spacedRepetition?: SpacedRepetitionEntity[];
 
 
