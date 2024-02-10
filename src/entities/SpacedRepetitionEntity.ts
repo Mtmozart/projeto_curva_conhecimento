@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+/*import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import UserEntity from "./UserEntity";
 
 @Entity()
@@ -53,3 +53,4 @@ export default class  SpacedRepetitionEntity {
 
 
 }
+*/

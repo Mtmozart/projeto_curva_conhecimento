@@ -33,11 +33,7 @@ async createUser(req: Request, res: Response) {
       password: dados.password
     };
 
-    const userAlreadyExist = await this.userRepository.findUserByEmail(newUser.email);
-    console.log(userAlreadyExist)
-    if (userAlreadyExist) {
-      return res.status(200).json({ message: "Usuário já cadastrado." });
-    }
+
 
     await this.userRepository.createUser(newUser);
 
@@ -47,7 +43,7 @@ async createUser(req: Request, res: Response) {
     });
 
   } catch (error) {
-    return res.status(500).json({ error: 'Erro ao criar o usuário' });
+    return res.status(500).json({ error: 'Erro ao criar o usuário'+ error });
   }
 }
 }

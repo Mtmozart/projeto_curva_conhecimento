@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
+/*import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import PermissionEntity from './PermissionsEntity';
 import RulesEntity from './RuleEntity';
 
@@ -13,4 +13,4 @@ export default class PermissionRulesEntity {
   @JoinColumn()
   rules: RulesEntity[];
 
-}
+}*/

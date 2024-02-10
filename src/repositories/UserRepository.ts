@@ -21,11 +21,11 @@ export default class UserRepository implements IUserRepository{
             email: email,
          })
 
-         if(user){
-          return { success: true };
+         if(!user){
+          return { success: false };
          }
 
-         return { success: false}
+         return { success: true}
 
 
         } catch (error) {

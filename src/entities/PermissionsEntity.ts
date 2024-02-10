@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+/*import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import RulesEntity from './RuleEntity';
 
 @Entity()
@@ -13,4 +13,4 @@ export default class PermissionEntity {
   description: string;
 
 
-}
+}*/
