@@ -4,6 +4,7 @@ import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
 import IVerification from '../security/validations/IValidations';
 import encrypt from '../security/validations/encryption/encryption';
+import createHashCode from '../security/authentication/authentication';
 
 
 
@@ -31,6 +32,7 @@ async createUser(req: Request, res: Response) {
 
     //encriptação
     const hashedPassword = encrypt(dados.password);
+    const token = createHashCode(dados);
 
     const newUser: UserEntity = {
       name: dados.name,
@@ -45,6 +47,7 @@ async createUser(req: Request, res: Response) {
     return res.status(201).json({
       name: newUser.name,
       email: newUser.email,
+      token: token
     });
 
   } catch (error) {
