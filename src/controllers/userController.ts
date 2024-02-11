@@ -3,6 +3,8 @@ import UserEntity from '../entities/UserEntity'
 import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
 import IVerification from '../security/validations/IValidations';
+import encrypt from '../security/validations/encryption/encryption';
+
 
 
 export default class UserController {
@@ -27,10 +29,13 @@ async createUser(req: Request, res: Response) {
       return res.status(401).json({ message });
     }
 
+    //encriptação
+    const hashedPassword = encrypt(dados.password);
+
     const newUser: UserEntity = {
       name: dados.name,
       email: dados.email,
-      password: dados.password
+      password: hashedPassword
     };
 
 
@@ -39,7 +44,7 @@ async createUser(req: Request, res: Response) {
 
     return res.status(201).json({
       name: newUser.name,
-      email: newUser.email
+      email: newUser.email,
     });
 
   } catch (error) {
