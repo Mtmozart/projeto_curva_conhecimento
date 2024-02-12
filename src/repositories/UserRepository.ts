@@ -10,6 +10,7 @@ export default class UserRepository implements IUserRepository{
     this.repository = repository;
    }
 
+
     async createUser(user: UserEntity): Promise<void> {
 
       await this.repository.save(user);
@@ -35,7 +36,27 @@ export default class UserRepository implements IUserRepository{
           };
         }
 
+    }
 
+   async findUserByEmailDatas(email: string): Promise<{ userEntity: UserEntity; }> {
+      try {
+        const user: UserEntity | undefined = await this.repository.findOneBy({
+          email: email,
+       })
+
+       if(!user){
+        return {userEntity: null };
+       }
+
+       return { userEntity: user}
+
+
+      } catch (error) {
+
+         throw new Error("Erro ao realizar o login" + error);
+
+
+      }
     }
 
 }

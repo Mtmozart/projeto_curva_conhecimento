@@ -1,4 +1,5 @@
 import CreateUserDTO from "../../DTO/userDTOs/CreateUserDTO";
+import LoginUserDTO from "../../DTO/userDTOs/LoginUserDTO";
 import { AppDataSource } from "../../config/dataSource";
 import UserRepository from "../../repositories/UserRepository";
 import IVerification from "./IValidations";
@@ -30,7 +31,7 @@ export default class AllVerifications implements IVerification{
     ];
   }
 
-  async verification(dados: CreateUserDTO): Promise<{ success: boolean; message?: string; }> {
+  async verification(dados: CreateUserDTO | LoginUserDTO): Promise<{ success: boolean; message?: string; }> {
 
     const results = await Promise.all(this.getAllVerifications().map(verification => verification.verification(dados)));
     const hasFailedVerification = results.some(result => !result.success);

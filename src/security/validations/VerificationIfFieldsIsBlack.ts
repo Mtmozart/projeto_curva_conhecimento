@@ -1,9 +1,10 @@
 import CreateUserDTO from "../../DTO/userDTOs/CreateUserDTO";
+import LoginUserDTO from "../../DTO/userDTOs/LoginUserDTO";
 import IVerification from "./IValidations";
 
 export class VerificationIfFieldsIsBlack implements IVerification{
 
-  async verification(dados: CreateUserDTO): Promise<{ success: boolean; message?: string; }> {
+  async verification(dados: CreateUserDTO ): Promise<{ success: boolean; message?: string; }> {
     for (const key in dados) {
       if (Object.prototype.hasOwnProperty.call(dados, key)) {
         const value = dados[key as keyof CreateUserDTO];

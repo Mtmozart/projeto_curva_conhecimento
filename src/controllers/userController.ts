@@ -5,7 +5,8 @@ import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
 import IVerification from '../security/validations/IValidations';
 import encrypt from '../security/encryption/encryption';
 import createHashCode from '../security/authentication/authentication';
-import AllVerifications from '../security/validations/AllVerifications';
+import AllVerifications from '../security/validations/AllVerificationsToCreateFields';
+import LoginUserDTO from '../DTO/userDTOs/LoginUserDTO';
 
 export default class UserController {
   private allVerification = new AllVerifications()
@@ -17,9 +18,9 @@ async createUser(req: Request, res: Response) {
   try {
     const dados: CreateUserDTO = req.body;
 
-
+    /*redução da lógica de modo a reaproveitá-la em todo o controller,
+    sim poderia reduzir mais, mas, está bom para o aprendizado. */
    const verifications = await this.allVerification.verification(dados);
-
    const message = verifications.message;
    if(!verifications.success){
     return res.status(400).json({ message })
@@ -46,6 +47,14 @@ async createUser(req: Request, res: Response) {
 }
 
   async login(req: Request, res: Response){
+
+    const dados:LoginUserDTO = req.body
+    const verifications = await this.allVerification.verification(dados);
+    const message = verifications.message;
+    if(!verifications.success){
+     return res.status(400).json({ message })
+    }
+
 
   }
 }
