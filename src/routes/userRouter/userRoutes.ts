@@ -14,10 +14,9 @@ const router = express.Router();
 const userRepository = new UserRepository(
   AppDataSource.getRepository("UserEntity")
 );
-const verifications= [new VerificationEmail(userRepository), new VerificationIfPasswordIsStrong(),
-   new VerificationPassword, new VerificationRegex, new VerificationIfFieldsIsBlack()];
 
-const userController = new UserController(userRepository, verifications);
+
+const userController = new UserController(userRepository);
 
 router.post("/create", (req, res) => userController.createUser(req, res))
 

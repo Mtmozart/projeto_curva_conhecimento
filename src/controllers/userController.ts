@@ -5,31 +5,36 @@ import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
 import IVerification from '../security/validations/IValidations';
 import encrypt from '../security/encryption/encryption';
 import createHashCode from '../security/authentication/authentication';
+import AllVerifications from '../security/validations/AllVerifications';
 
 export default class UserController {
-constructor(private userRepository: UserRepository, private verifications: IVerification[]){
-this.verifications = verifications;
+  private allVerification = new AllVerifications()
+constructor(private userRepository: UserRepository){
+
 }
 
 async createUser(req: Request, res: Response) {
   try {
     const dados: CreateUserDTO = req.body;
-    const results = await Promise.all(this.verifications.map(verification => verification.verification(dados)));
-    const hasFailedVerification = results.some(result => !result.success);
-    if (hasFailedVerification) {
-      const failedVerification = results.find(result => !result.success);
-      const message = failedVerification?.message || "Erro durante a verificação.";
-      return res.status(401).json({ message });
-    }
+
+
+   const verifications = await this.allVerification.verification(dados);
+
+   const message = verifications.message;
+   if(!verifications.success){
+    return res.status(400).json({ message })
+   }
+
     //encriptação
     const hashedPassword = encrypt(dados.password);
-    const token = createHashCode(dados);
+
     const newUser: UserEntity = {
       name: dados.name,
       email: dados.email,
       password: hashedPassword
     };
     await this.userRepository.createUser(newUser);
+    const token = createHashCode(dados);
     return res.status(201).json({
       name: newUser.name,
       email: newUser.email,
@@ -39,4 +44,8 @@ async createUser(req: Request, res: Response) {
     return res.status(500).json({ error: 'Erro ao criar o usuário'+ error });
   }
 }
+
+  async login(req: Request, res: Response){
+
+  }
 }
