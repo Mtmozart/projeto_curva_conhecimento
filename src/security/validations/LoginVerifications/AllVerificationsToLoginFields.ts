@@ -22,7 +22,7 @@ export default class AllVerificationsToLoginFields implements IVerification{
     return [
       new VerificationRegex(),
       new VerificationIfFieldsIsBlack(),
-      new VerificationEmail(this.userRepository),
+      new VerificationEmail(),
 
     ];
   }

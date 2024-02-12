@@ -5,7 +5,7 @@ import UserRepository from "../../repositories/UserRepository";
 
   export class VerificationEmail implements IVerification{
 
-    constructor(private repository: UserRepository){
+    constructor(){
 
     }
 
@@ -20,12 +20,6 @@ import UserRepository from "../../repositories/UserRepository";
       }
 
 
-
-      const userAlreadyExist = await this.repository.findUserByEmail(dados.email);
-
-      if (userAlreadyExist.success === true) {
-        return { success: false, message: "O E-mail já cadastrado." };
-      }
 
 
       return { success: true };

@@ -2,17 +2,19 @@ import { Request, Response } from 'express'
 import UserEntity from '../entities/UserEntity'
 import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
-import IVerification from '../security/validations/IValidations';
 import encrypt from '../security/encryption/encryption';
 import createHashCode from '../security/authentication/authentication';
 import AllVerifications from '../security/validations/AllVerificationsToCreateFields';
 import LoginUserDTO from '../DTO/userDTOs/LoginUserDTO';
+import UserService from '../service/UserService';
 
 export default class UserController {
-  private allVerification = new AllVerifications()
-constructor(private userRepository: UserRepository){
+  private allVerification = new AllVerifications();
+  private userService: UserService;
 
-}
+  constructor(private userRepository: UserRepository) {
+    this.userService = new UserService(userRepository);
+  }
 
 async createUser(req: Request, res: Response) {
   try {
@@ -34,13 +36,20 @@ async createUser(req: Request, res: Response) {
       email: dados.email,
       password: hashedPassword
     };
-    await this.userRepository.createUser(newUser);
+
+   const responseService  =  await this.userService.create(newUser)
+   const messageService = responseService.message;
+    if(responseService.success === false){
+      return res.status(400).json({messageService})
+    }
+
     const token = createHashCode(dados);
     return res.status(201).json({
       name: newUser.name,
       email: newUser.email,
       token: token
     });
+
   } catch (error) {
     return res.status(500).json({ error: 'Erro ao criar o usuário'+ error });
   }

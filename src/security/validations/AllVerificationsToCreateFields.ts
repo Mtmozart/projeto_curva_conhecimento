@@ -23,7 +23,7 @@ export default class AllVerifications implements IVerification{
 
   private getAllVerifications(): IVerification[] {
     return [
-      new VerificationEmail(this.userRepository),
+      new VerificationEmail(),
       new VerificationIfPasswordIsStrong(),
       new VerificationPassword(),
       new VerificationRegex(),
