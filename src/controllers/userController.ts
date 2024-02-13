@@ -1,16 +1,17 @@
 import { Request, Response } from 'express'
-import UserEntity from '../entities/UserEntity'
 import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
-import encrypt from '../security/encryption/encryption';
-import createHashCode from '../security/authentication/authentication';
+import createToken from '../security/authentication/authentication';
 import AllVerifications from '../security/validations/AllVerificationsToCreateFields';
 import LoginUserDTO from '../DTO/userDTOs/LoginUserDTO';
 import UserService from '../service/UserService';
+import AllVerificationsToLoginFields from '../security/validations/LoginVerifications/AllVerificationsToLoginFields';
 
 export default class UserController {
   private allVerification = new AllVerifications();
   private userService: UserService;
+  private allVerificationToLOgin = new AllVerificationsToLoginFields()
+
 
   constructor(private userRepository: UserRepository) {
     this.userService = new UserService(userRepository);
@@ -21,32 +22,23 @@ async createUser(req: Request, res: Response) {
     const dados: CreateUserDTO = req.body;
 
     /*redução da lógica de modo a reaproveitá-la em todo o controller,
-    sim poderia reduzir mais, mas, está bom para o aprendizado. */
+    sim, poderia reduzir mais, mas, está bom para o aprendizado. */
    const verifications = await this.allVerification.verification(dados);
    const message = verifications.message;
    if(!verifications.success){
     return res.status(400).json({ message })
    }
 
-    //encriptação
-    const hashedPassword = encrypt(dados.password);
-
-    const newUser: UserEntity = {
-      name: dados.name,
-      email: dados.email,
-      password: hashedPassword
-    };
-
-   const responseService  =  await this.userService.create(newUser)
-   const messageService = responseService.message;
-    if(responseService.success === false){
+   const createUser  =  await this.userService.create(dados)
+   const messageService = createUser.message;
+    if(createUser.success === false){
       return res.status(400).json({messageService})
     }
 
-    const token = createHashCode(dados);
+    const token = createToken(dados);
     return res.status(201).json({
-      name: newUser.name,
-      email: newUser.email,
+      name: dados.name,
+      email: dados.email,
       token: token
     });
 
@@ -58,11 +50,31 @@ async createUser(req: Request, res: Response) {
   async login(req: Request, res: Response){
 
     const dados:LoginUserDTO = req.body
-    const verifications = await this.allVerification.verification(dados);
+    const verifications = await this.allVerificationToLOgin.verification(dados);
     const message = verifications.message;
     if(!verifications.success){
      return res.status(400).json({ message })
     }
+
+
+    const user = await this.userService.login(dados);
+    const messageUser = user.message;
+    if(user.success === false){
+      return res.status(400).json({messageUser})
+    }
+
+    const userToken = {
+      name: user.user.name,
+      email: user.user.email
+    }
+
+    const token = createToken(userToken);
+
+    return res.status(200).json({
+      name: userToken.name,
+      email: userToken.email,
+      token: token
+    });
 
 
   }

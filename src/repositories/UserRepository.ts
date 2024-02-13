@@ -38,17 +38,17 @@ export default class UserRepository implements IUserRepository{
 
     }
 
-   async findUserByEmailDatas(email: string): Promise<{ userEntity: UserEntity; }> {
+   async findUserByEmailDatas(email: string): Promise<{ datas: UserEntity; }> {
       try {
         const user: UserEntity | undefined = await this.repository.findOneBy({
           email: email,
        })
 
        if(!user){
-        return {userEntity: null };
+        return {datas: null };
        }
 
-       return { userEntity: user}
+       return { datas: user}
 
 
       } catch (error) {
