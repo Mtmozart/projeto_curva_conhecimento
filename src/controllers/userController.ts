@@ -1,16 +1,17 @@
 import { Request, Response } from 'express'
 import UserRepository from '../repositories/UserRepository'
 import CreateUserDTO from '../DTO/userDTOs/CreateUserDTO';
-import createToken from '../security/authentication/authentication';
 import AllVerifications from '../security/validations/AllVerificationsToCreateFields';
 import LoginUserDTO from '../DTO/userDTOs/LoginUserDTO';
 import UserService from '../service/UserService';
 import AllVerificationsToLoginFields from '../security/validations/LoginVerifications/AllVerificationsToLoginFields';
+import AuthenticationJWT from '../security/authentication/AuthenticationJWT';
 
 export default class UserController {
   private allVerification = new AllVerifications();
   private userService: UserService;
   private allVerificationToLOgin = new AllVerificationsToLoginFields()
+  private authentication = new AuthenticationJWT()
 
 
   constructor(private userRepository: UserRepository) {
@@ -35,7 +36,7 @@ async createUser(req: Request, res: Response) {
       return res.status(400).json({messageService})
     }
 
-    const token = createToken(dados);
+    const token = this.authentication.createToken(dados);
     return res.status(201).json({
       name: dados.name,
       email: dados.email,
@@ -67,9 +68,7 @@ async createUser(req: Request, res: Response) {
       name: user.user.name,
       email: user.user.email
     }
-
-    const token = createToken(userToken);
-
+    const token = this.authentication.createToken(userToken);
     return res.status(200).json({
       name: userToken.name,
       email: userToken.email,
