@@ -1,33 +1,31 @@
 import { Request, Response, NextFunction } from "express";
-import AuthenticationJWT from '../security/authentication/AuthenticationJWT.js';
-import TokenJWTDTO from "../DTO/userDTOs/TokenJWTDTO.js";
-
+import AuthenticationJWT from '../security/authentication/AuthenticationJWT';
+import TokenJWTDTO from "../DTO/userDTOs/TokenJWTDTO";
 
 export default class AuthMiddleware {
 
-  private authenticationJWT = new AuthenticationJWT()
+  private authentication = new AuthenticationJWT()
 
-  public async  authMiddleware(req: Request, res: Response, next: NextFunction) {
-
+  public authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const headersToken = req.headers['authorization']
 
     if (!headersToken) {
       return res.status(401).json({ message: "Acesso negado." });
     }
 
+    const tokenSplit = headersToken.split(' ');
+    const token = tokenSplit[1]
+
     try {
-      const tokenSplit = headersToken.split(' ');
-      const token = tokenSplit[1]
-      const user: TokenJWTDTO = await this.authenticationJWT.verify(token);
+      const user: TokenJWTDTO = await this.authentication.verify(token);
       if (!user) {
         return res.status(401).json({ message: "Acesso negado." });
       }
 
-    next()
-  }catch (error) {
-    console.log(error)
-   res.status(401).json({ message: "Acesso negado."});
+      next();
+    } catch (error) {
+      console.error('Erro na verificação do token:', error);
+      return res.status(500).json({ message: "Erro na verificação do token." });
+    }
   }
-
-}
 }

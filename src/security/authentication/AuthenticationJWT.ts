@@ -18,14 +18,14 @@ export default class AuthenticationJWT {
   return token;
   }
 
-  public async verify(token: string): Promise<TokenJWTDTO>{
-    console.log(token)
+   verify(token: string): TokenJWTDTO{
+
     try {
-      const decoded: TokenJWTDTO = await this.jwt.verify(token, this.secret)
-      console.log(decoded)
+      const decoded: TokenJWTDTO = this.jwt.verify(token, this.secret)
+
       return decoded
     } catch (error) {
-      console.log(token)
+
       throw new Error("Erro na verificação do token.")
     }
 

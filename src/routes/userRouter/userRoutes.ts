@@ -19,6 +19,8 @@ const authM = new AuthMiddleware();
 
 router.post("/create", (req, res) => userController.createUser(req, res))
 router.post("/login", (req, res) => userController.login(req, res))
-router.get("/details", authM.authMiddleware)
+router.get("/details", authM.authMiddleware, (req, res) => {
+  userController.details(req, res)
+});
 
 export default router
