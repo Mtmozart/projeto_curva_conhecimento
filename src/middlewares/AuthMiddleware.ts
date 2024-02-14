@@ -24,7 +24,7 @@ export default class AuthMiddleware {
 
       next();
     } catch (error) {
-      console.error('Erro na verificação do token:', error);
+
       return res.status(500).json({ message: "Erro na verificação do token." });
     }
   }
