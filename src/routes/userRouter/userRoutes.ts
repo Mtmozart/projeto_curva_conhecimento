@@ -1,5 +1,5 @@
 import express from "express"
-import UserController from "../../controllers/userController";
+import UserController from "../../controllers/UserController";
 import UserRepository from "../../repositories/UserRepository";
 import { AppDataSource } from "../../config/dataSource";
 import AuthMiddleware from "../../middlewares/AuthMiddleware"
@@ -19,7 +19,7 @@ const authM = new AuthMiddleware();
 
 router.post("/create", (req, res) => userController.createUser(req, res))
 router.post("/login", (req, res) => userController.login(req, res))
-router.get("/details", authM.authMiddleware, (req, res) => {
+router.get("/details/:id", authM.authMiddleware, (req, res) => {
   userController.details(req, res)
 });
 

@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import UserEntity from "../entities/UserEntity";
 import IUserRepository from "./interfaces/IUserRepository";
+import UserDetailsDTO from "../DTO/userDTOs/UserDetailsDTO";
 
 export default class UserRepository implements IUserRepository{
 
@@ -9,6 +10,7 @@ export default class UserRepository implements IUserRepository{
    constructor(repository: Repository<UserEntity>){
     this.repository = repository;
    }
+
 
 
     async createUser(user: UserEntity): Promise<void> {
@@ -55,6 +57,33 @@ export default class UserRepository implements IUserRepository{
 
          throw new Error("Erro ao realizar o login" + error);
 
+
+      }
+    }
+
+    async findUserById(id: number): Promise<{ user: UserDetailsDTO | null; }> {
+
+      try {
+        const findUser: UserEntity = await this.repository.findOneBy({
+          id: id,
+       })
+
+       if(!findUser){
+        return {user: null };
+       }
+
+       const user = {
+        name: findUser.name,
+        email: findUser.email,
+        password: findUser.password
+       }
+
+       return { user }
+
+
+      } catch (error) {
+
+         throw new Error("Erro ao realizar o login" + error);
 
       }
     }

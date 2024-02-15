@@ -6,6 +6,7 @@ import LoginUserDTO from '../DTO/userDTOs/LoginUserDTO';
 import UserService from '../service/UserService';
 import AllVerificationsToLoginFields from '../security/validations/LoginVerifications/AllVerificationsToLoginFields';
 import AuthenticationJWT from '../security/authentication/AuthenticationJWT';
+import UserDetailsDTO from '../DTO/userDTOs/UserDetailsDTO';
 
 export default class UserController {
   private allVerification = new AllVerifications();
@@ -79,6 +80,23 @@ async createUser(req: Request, res: Response) {
 
   async details(req: Request, res: Response){
 
-   return res.status(200).json({ message: "sucesso"})
+    const id: number = parseInt(req.params.id);
+
+    if(!id){
+      return res.status(400).json({ message: "Id inválido."})
+    }
+
+    const  user  = await this.userService.details(id);
+
+    if(!user.success){
+      return res.status(400).json({ message: user.message })
+    }
+
+    return res.status(200).json({
+      name: user.user.name,
+      email: user.user.email,
+    });
+
+
   }
 }

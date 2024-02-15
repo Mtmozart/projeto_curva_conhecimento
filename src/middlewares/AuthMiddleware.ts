@@ -21,10 +21,8 @@ export default class AuthMiddleware {
       if (!user) {
         return res.status(401).json({ message: "Acesso negado." });
       }
-
       next();
     } catch (error) {
-
       return res.status(500).json({ message: "Erro na verificação do token." });
     }
   }

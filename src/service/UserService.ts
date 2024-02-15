@@ -1,5 +1,6 @@
 import CreateUserDTO from "../DTO/userDTOs/CreateUserDTO";
 import LoginUserDTO from "../DTO/userDTOs/LoginUserDTO";
+import UserDetailsDTO from "../DTO/userDTOs/UserDetailsDTO";
 import UserEntity from "../entities/UserEntity";
 import UserRepository from "../repositories/UserRepository";
 import Encryptions from "../security/encryption/encryptions";
@@ -47,4 +48,21 @@ export default class UserService {
 
     return { success: true, user: user.datas }
   }
+
+
+
+  async details(id: number): Promise<{
+    success: boolean;
+    message?: string;
+    user?: UserDetailsDTO;
+}> {
+    const { user } = await this.userRepository.findUserById(id);
+
+    if (!user) {
+        return { success: false, message: "Id inválido." };
+    }
+
+    return { success: true, user };
+}
+
 }
