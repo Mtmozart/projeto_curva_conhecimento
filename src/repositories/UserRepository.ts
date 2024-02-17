@@ -13,6 +13,7 @@ export default class UserRepository implements IUserRepository{
 
 
 
+
     async createUser(user: UserEntity): Promise<void> {
 
       await this.repository.save(user);
@@ -49,14 +50,11 @@ export default class UserRepository implements IUserRepository{
        if(!user){
         return {datas: null };
        }
-
        return { datas: user}
-
 
       } catch (error) {
 
          throw new Error("Erro ao realizar o login" + error);
-
 
       }
     }
@@ -88,4 +86,12 @@ export default class UserRepository implements IUserRepository{
       }
     }
 
+  async  updateUser(user: UserEntity): Promise<{ success: boolean; message?: string; }> {
+     const userUpdate = await this.repository.save(user)
+
+     if(!userUpdate){
+      return { success: false, message: "Falha ao atualizar o usuário."}
+     }
+     return { success: true }
+    }
 }

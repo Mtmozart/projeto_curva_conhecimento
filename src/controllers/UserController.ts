@@ -7,12 +7,16 @@ import UserService from '../service/UserService';
 import AllVerificationsToLoginFields from '../security/validations/LoginVerifications/AllVerificationsToLoginFields';
 import AuthenticationJWT from '../security/authentication/AuthenticationJWT';
 import UserDetailsDTO from '../DTO/userDTOs/UserDetailsDTO';
+import CaptureToken from '../utils/CaptureToken';
+import UpdateUserDTO from '../DTO/userDTOs/UpdateUserDTO';
 
 export default class UserController {
   private allVerification = new AllVerifications();
   private userService: UserService;
   private allVerificationToLOgin = new AllVerificationsToLoginFields()
   private authentication = new AuthenticationJWT()
+  private captureToken = new CaptureToken()
+  private allVerificationToUpdate = new AllVerificationsToLoginFields()
 
 
   constructor(private userRepository: UserRepository) {
@@ -86,7 +90,7 @@ async createUser(req: Request, res: Response) {
       return res.status(400).json({ message: "Id inválido."})
     }
 
-    const  user  = await this.userService.details(id);
+    const user = await this.userService.details(id);
 
     if(!user.success){
       return res.status(400).json({ message: user.message })
@@ -97,6 +101,37 @@ async createUser(req: Request, res: Response) {
       email: user.user.email,
     });
 
+  }
+
+  async update(req: Request, res: Response){
+
+    const id: number = Number(req.params.id);
+    const newDatas: UpdateUserDTO = req.body;
+    const verifications = await this.allVerificationToUpdate.verification(newDatas);
+    const message = verifications.message;
+    if(!verifications.success){
+     return res.status(400).json({ message })
+    }
+
+    if(!id){
+      return res.status(400).json({ message: "Id inválido."})
+    }
+
+    const token = await this.captureToken.captured(req);
+    if (!token.success) {
+      return res.status(401).json({ message: token.message });
+    }
+
+    const userUpdate = await this.userService.update(id, token.token, newDatas);
+
+    if(!userUpdate.success){
+      return res.status(401).json({ message: userUpdate.message });
+    }
+
+    return res.status(201).json({ message: userUpdate.message})
+
+
 
   }
+
 }

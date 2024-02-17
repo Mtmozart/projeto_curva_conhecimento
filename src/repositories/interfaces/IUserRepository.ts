@@ -7,4 +7,5 @@ export default interface IUserRepository {
     findUserByEmail(email: string): Promise<{ success: boolean; message?: string }>
     findUserByEmailDatas(email: string): Promise<{datas: UserEntity | null}>
     findUserById(id: number): Promise<{user: UserDetailsDTO | null}>
+    updateUser(user: UserEntity): Promise<{ success: boolean; message?: string }>
 }

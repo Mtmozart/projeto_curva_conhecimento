@@ -1,13 +1,18 @@
 import CreateUserDTO from "../DTO/userDTOs/CreateUserDTO";
 import LoginUserDTO from "../DTO/userDTOs/LoginUserDTO";
+import UpdateUserDTO from "../DTO/userDTOs/UpdateUserDTO";
 import UserDetailsDTO from "../DTO/userDTOs/UserDetailsDTO";
 import UserEntity from "../entities/UserEntity";
 import UserRepository from "../repositories/UserRepository";
+import AuthenticationJWT from "../security/authentication/AuthenticationJWT";
 import Encryptions from "../security/encryption/encryptions";
+
 
 export default class UserService {
 
   private encryptions: Encryptions = new Encryptions();
+  private authToken = new AuthenticationJWT();
+
   constructor(private userRepository: UserRepository){
 
   }
@@ -65,4 +70,26 @@ export default class UserService {
     return { success: true, user };
 }
 
+async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
+  success: boolean;
+  message?: string;
+  user?: UpdateUserDTO;
+}> {
+
+  const userToken = await this.authToken.verify(token);
+  const{ datas }= await this.userRepository.findUserByEmailDatas(userToken.email);
+
+
+   if(datas.id != id || datas.id == null){
+
+    return { success: false, message: "Id inválido." };
+   }
+
+
+   Object.assign(datas, newData);
+
+   await this.userRepository.updateUser(datas);
+
+  return { success: true };
+}
 }
