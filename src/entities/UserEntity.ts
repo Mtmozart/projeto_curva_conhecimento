@@ -11,6 +11,7 @@ export default class UserEntity {
   email: string;
   @Column()
   password: string;
+
  /*@ManyToMany(() => PermissionRulesEntity, {nullable: true, cascade: true, eager: true })
   @JoinTable()
   permission_rules?: PermissionRulesEntity;

@@ -1,7 +1,4 @@
 {
-  "cSpell.words": [
-    "typeorm",
-    "uuidv"
-  ],
+  "cSpell.words": ["JWTDTO", "typeorm", "uuidv"],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

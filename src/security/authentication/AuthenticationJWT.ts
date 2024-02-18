@@ -10,7 +10,10 @@ export default class AuthenticationJWT {
 
 
   createToken(user: TokenJWTDTO): string {
-  const token = this.jwt.sign({
+
+
+    const token = this.jwt.sign({
+    id: user.id,
     name: user.name,
     email: user.email
   }, this.secret,  { expiresIn: '1h' });

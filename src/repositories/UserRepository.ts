@@ -11,12 +11,15 @@ export default class UserRepository implements IUserRepository{
     this.repository = repository;
    }
 
+    async createUser(user: UserEntity): Promise<{newUser: UserEntity}> {
 
+      try {
+        const newUser = await this.repository.save(user);
+        return { newUser };
+      } catch (error) {
 
-
-    async createUser(user: UserEntity): Promise<void> {
-
-      await this.repository.save(user);
+        throw error;
+      }
     }
 
     async findUserByEmail(email: string):Promise<{ success: boolean; message?: string }>{
@@ -54,7 +57,7 @@ export default class UserRepository implements IUserRepository{
 
       } catch (error) {
 
-         throw new Error("Erro ao realizar o login" + error);
+         throw new Error("Erro ao consultar o usuário" + error);
 
       }
     }
@@ -71,12 +74,13 @@ export default class UserRepository implements IUserRepository{
        }
 
        const user = {
+        id: findUser.id.toString(),
         name: findUser.name,
         email: findUser.email,
         password: findUser.password
        }
 
-       return { user }
+       return { user: user }
 
 
       } catch (error) {

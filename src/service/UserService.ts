@@ -1,4 +1,5 @@
 import CreateUserDTO from "../DTO/userDTOs/CreateUserDTO";
+import CreateUserDTOResponse from "../DTO/userDTOs/CreateUserDTOResponse";
 import LoginUserDTO from "../DTO/userDTOs/LoginUserDTO";
 import UpdateUserDTO from "../DTO/userDTOs/UpdateUserDTO";
 import UserDetailsDTO from "../DTO/userDTOs/UserDetailsDTO";
@@ -17,7 +18,7 @@ export default class UserService {
 
   }
 
-  async create(dados: CreateUserDTO): Promise<{ success: boolean; message?: string }>{
+  async create(dados: CreateUserDTO): Promise<{ success: boolean; message?: string, user?: CreateUserDTOResponse}>{
     const userAlreadyExist = await this.userRepository.findUserByEmail(dados.email);
 
     if(userAlreadyExist.success) {
@@ -31,11 +32,21 @@ export default class UserService {
         email: dados.email,
         password: hashedPassword
       };
-    await this.userRepository.createUser(newUser);
-    return { success: true}
+
+   const userCreated =  await this.userRepository.createUser(newUser);
+
+
+   const userResponse: CreateUserDTOResponse ={
+    id: userCreated.newUser.id.toString(),
+    name: userCreated.newUser.name,
+    email: userCreated.newUser.email,
+
   }
 
-  async login(dados: LoginUserDTO): Promise<{ success: boolean; message?: string, user?: UserEntity }> {
+    return { success: true, user: userResponse };
+  }
+
+  async login(dados: LoginUserDTO): Promise<{ success: boolean; message?: string, user?: LoginUserDTO }> {
 
     const user = await this.userRepository.findUserByEmailDatas(dados.email);
 
@@ -46,12 +57,21 @@ export default class UserService {
 
     const verificationPassword = await this.encryptions.decode(dados.password, user.datas.password);
 
-
     if(!verificationPassword.success){
       return { success: false, message: "Credenciais inválida." };
     }
 
-    return { success: true, user: user.datas }
+    const id = user.datas.id.toString()
+
+    const userLogin: LoginUserDTO = {
+      id: id,
+      name: user.datas.name,
+      email: user.datas.email,
+      password: user.datas.password
+    }
+
+
+    return { success: true, user: userLogin }
   }
 
 
@@ -77,10 +97,16 @@ async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
 }> {
 
   const userToken = await this.authToken.verify(token);
-  const{ datas }= await this.userRepository.findUserByEmailDatas(userToken.email);
 
 
-   if(datas.id != id || datas.id == null){
+  const { datas }= await this.userRepository.findUserByEmailDatas(userToken.email);
+
+
+  if(!datas){
+    return { success: false, message: "Id inválido." };
+   }
+
+   if(datas.id!= id || datas.id == null){
 
     return { success: false, message: "Id inválido." };
    }

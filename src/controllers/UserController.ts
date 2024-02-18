@@ -6,9 +6,9 @@ import LoginUserDTO from '../DTO/userDTOs/LoginUserDTO';
 import UserService from '../service/UserService';
 import AllVerificationsToLoginFields from '../security/validations/LoginVerifications/AllVerificationsToLoginFields';
 import AuthenticationJWT from '../security/authentication/AuthenticationJWT';
-import UserDetailsDTO from '../DTO/userDTOs/UserDetailsDTO';
 import CaptureToken from '../utils/CaptureToken';
 import UpdateUserDTO from '../DTO/userDTOs/UpdateUserDTO';
+import TokenJWTDTO from '../DTO/userDTOs/TokenJWTDTO';
 
 export default class UserController {
   private allVerification = new AllVerifications();
@@ -35,16 +35,25 @@ async createUser(req: Request, res: Response) {
     return res.status(400).json({ message })
    }
 
-   const createUser  =  await this.userService.create(dados)
-   const messageService = createUser.message;
-    if(createUser.success === false){
+   const createdUser  =  await this.userService.create(dados)
+
+   const messageService = createdUser.message;
+    if(createdUser.success === false){
       return res.status(400).json({messageService})
     }
 
-    const token = this.authentication.createToken(dados);
+    const newUser: TokenJWTDTO = {
+      id: createdUser.user.id,
+      name: createdUser.user.name,
+      email: createdUser.user.email,
+     }
+
+    const token = this.authentication.createToken(newUser);
+
     return res.status(201).json({
-      name: dados.name,
-      email: dados.email,
+      id: createdUser.user.id,
+      name: createdUser.user.name,
+      email: createdUser.user.email,
       token: token
     });
 
@@ -62,26 +71,27 @@ async createUser(req: Request, res: Response) {
      return res.status(400).json({ message })
     }
 
-
     const user = await this.userService.login(dados);
     const messageUser = user.message;
     if(user.success === false){
       return res.status(400).json({messageUser})
     }
 
-    const userToken = {
+    const userToken: TokenJWTDTO= {
+      id: user.user.id,
       name: user.user.name,
-      email: user.user.email
+      email: user.user.email,
     }
+
     const token = this.authentication.createToken(userToken);
     return res.status(200).json({
-      name: userToken.name,
-      email: userToken.email,
+      id: user.user.id,
+      name: user.user.name,
+      email: user.user.email,
       token: token
     });
 
   }
-
   async details(req: Request, res: Response){
 
     const id: number = parseInt(req.params.id);
@@ -128,8 +138,9 @@ async createUser(req: Request, res: Response) {
       return res.status(401).json({ message: userUpdate.message });
     }
 
-    return res.status(201).json({ message: userUpdate.message})
+    const newToken = this.authentication.createToken(userUpdate.user);
 
+    return res.status(201).json({ message: userUpdate.message, token: newToken })
 
 
   }
