@@ -133,10 +133,16 @@ async createUser(req: Request, res: Response) {
       return res.status(401).json({ message: message });
     }
 
-    const newToken = this.authentication.createToken(user);
 
 
-    return res.status(201).json({ message: message, token: newToken })
+    const newToken =  this.authentication.createToken(user);
+
+
+    return res.status(201).json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      token: newToken,  })
 
 
   }

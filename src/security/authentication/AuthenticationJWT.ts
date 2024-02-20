@@ -11,7 +11,6 @@ export default class AuthenticationJWT {
 
   createToken(user: any): string {
 
-
     const token = this.jwt.sign({
     id: user.id,
     name: user.name,

@@ -105,7 +105,7 @@ async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
   if(!user){
     return { success: false, message: "Id inválido aqui." };
    }
-   console.log(user)
+
    if(Number(user.id) != id || user.id == null){
     return { success: false, message: "Id inválido aqui 2." };
    }
@@ -120,6 +120,6 @@ async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
 
    await this.userRepository.updateUser(newUser);
 
-  return { success: true };
+  return { success: true, user: newData };
 }
 }
