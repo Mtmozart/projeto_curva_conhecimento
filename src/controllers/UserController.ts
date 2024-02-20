@@ -77,13 +77,8 @@ async createUser(req: Request, res: Response) {
       return res.status(400).json({messageUser})
     }
 
-    const userToken: TokenJWTDTO= {
-      id: user.user.id,
-      name: user.user.name,
-      email: user.user.email,
-    }
 
-    const token = this.authentication.createToken(userToken);
+    const token = this.authentication.createToken(user.user);
     return res.status(200).json({
       id: user.user.id,
       name: user.user.name,
@@ -118,9 +113,9 @@ async createUser(req: Request, res: Response) {
     const id: number = Number(req.params.id);
     const newDatas: UpdateUserDTO = req.body;
     const verifications = await this.allVerificationToUpdate.verification(newDatas);
-    const message = verifications.message;
+    const messageVerification = verifications.message;
     if(!verifications.success){
-     return res.status(400).json({ message })
+     return res.status(400).json({ messageVerification })
     }
 
     if(!id){
@@ -132,15 +127,16 @@ async createUser(req: Request, res: Response) {
       return res.status(401).json({ message: token.message });
     }
 
-    const userUpdate = await this.userService.update(id, token.token, newDatas);
+    const{ user, message, success} = await this.userService.update(id, token.token, newDatas);
 
-    if(!userUpdate.success){
-      return res.status(401).json({ message: userUpdate.message });
+    if(!success){
+      return res.status(401).json({ message: message });
     }
 
-    const newToken = this.authentication.createToken(userUpdate.user);
+    const newToken = this.authentication.createToken(user);
 
-    return res.status(201).json({ message: userUpdate.message, token: newToken })
+
+    return res.status(201).json({ message: message, token: newToken })
 
 
   }

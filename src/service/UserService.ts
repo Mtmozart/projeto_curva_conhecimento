@@ -99,22 +99,26 @@ async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
   const userToken = await this.authToken.verify(token);
 
 
-  const { datas }= await this.userRepository.findUserByEmailDatas(userToken.email);
+  const { user }= await this.userRepository.findUserById(userToken.id);
 
 
-  if(!datas){
-    return { success: false, message: "Id inválido." };
+  if(!user){
+    return { success: false, message: "Id inválido aqui." };
+   }
+   console.log(user)
+   if(Number(user.id) != id || user.id == null){
+    return { success: false, message: "Id inválido aqui 2." };
+   }
+   Object.assign(user, newData);
+
+   const newUser: UserEntity = {
+    id: Number(user.id),
+    name: user.email,
+    password: newData.password,
+    email: user.email
    }
 
-   if(datas.id!= id || datas.id == null){
-
-    return { success: false, message: "Id inválido." };
-   }
-
-
-   Object.assign(datas, newData);
-
-   await this.userRepository.updateUser(datas);
+   await this.userRepository.updateUser(newUser);
 
   return { success: true };
 }

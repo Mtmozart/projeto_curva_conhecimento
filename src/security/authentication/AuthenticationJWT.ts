@@ -9,7 +9,7 @@ export default class AuthenticationJWT {
   private secret =  process.env.SECRET
 
 
-  createToken(user: TokenJWTDTO): string {
+  createToken(user: any): string {
 
 
     const token = this.jwt.sign({
@@ -21,7 +21,7 @@ export default class AuthenticationJWT {
   return token;
   }
 
-   verify(token: string): TokenJWTDTO{
+   verify(token: string): any{
 
     try {
       const decoded: TokenJWTDTO = this.jwt.verify(token, this.secret)
