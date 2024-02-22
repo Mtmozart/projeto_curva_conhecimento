@@ -103,18 +103,21 @@ async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
 
 
   if(!user){
-    return { success: false, message: "Id inválido aqui." };
+    return { success: false, message: "Id inválido." };
    }
 
    if(Number(user.id) != id || user.id == null){
-    return { success: false, message: "Id inválido aqui 2." };
+    return { success: false, message: "Id inválido." };
    }
+
+   const hashedPassword = this.encryptions.encrypt(newData.password);
+
    Object.assign(user, newData);
 
    const newUser: UserEntity = {
     id: Number(user.id),
-    name: user.email,
-    password: newData.password,
+    name: user.name,
+    password: hashedPassword,
     email: user.email
    }
 
