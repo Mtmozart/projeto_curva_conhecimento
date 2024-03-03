@@ -14,17 +14,17 @@ export default class  SpacedRepetitionEntity {
   @Column()
   firstStudy: Date;
   @Column()
-  firstRevisionCourtTerm: Date;
+  firstRevisionCourtTerm: Date;//15 minutes
   @Column()
-  mediumTerm: Date;
+  mediumTerm: Date; // one day
   @Column()
-  longTerm: Date;
+  longTerm: Date;// seven day
   @Column()
-  upToOneMonth: Date;
+  upToOneMonth: Date;//one months
   @Column()
-  upToTwoMonths: Date;
+  upToTwoMonths: Date;//two months
   @Column()
-  upToSixMonths: Date;
+  upToThreeMonths: Date;//Three months
   @Column()
   active: boolean;
 
@@ -38,7 +38,7 @@ export default class  SpacedRepetitionEntity {
     longTerm: Date,
     upToOneMonth: Date,
     upToTwoMonths: Date,
-    upToSixMonths: Date,
+    upToThreeMonths: Date,
     active: boolean
   ) {
     this.user = user;
@@ -50,7 +50,7 @@ export default class  SpacedRepetitionEntity {
     this.longTerm = longTerm;
     this.upToOneMonth = upToOneMonth;
     this.upToTwoMonths = upToTwoMonths;
-    this.upToSixMonths = upToSixMonths;
+    this.upToThreeMonths = upToThreeMonths;
     this.active = active;
   }
 
