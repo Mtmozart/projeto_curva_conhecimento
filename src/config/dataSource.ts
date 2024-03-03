@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import UserEntity from "../entities/UserEntity";
+import SpacedRepetitionEntity from "../entities/SpacedRepetitionEntity";
 
 require('dotenv').config();
 
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
  // entities: [UserEntity, SpacedRepetitionEntity,PermissionRulesEntity, PermissionEntity, RulesEntity],
- entities: [UserEntity],
+ entities: [UserEntity, SpacedRepetitionEntity],
  synchronize: true,
 
  // logging: true,

@@ -90,39 +90,41 @@ export default class UserService {
     return { success: true, user };
 }
 
-async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
-  success: boolean;
-  message?: string;
-  user?: UpdateUserDTO;
-}> {
+    async update(id: number, token: string, newData: UpdateUserDTO): Promise<{
+      success: boolean;
+      message?: string;
+      user?: UpdateUserDTO;
+    }> {
 
-  const userToken = await this.authToken.verify(token);
-
-
-  const { user }= await this.userRepository.findUserById(userToken.id);
+      const userToken = await this.authToken.verify(token);
 
 
-  if(!user){
-    return { success: false, message: "Id inválido." };
-   }
+      const { user }= await this.userRepository.findUserById(userToken.id);
 
-   if(Number(user.id) != id || user.id == null){
-    return { success: false, message: "Id inválido." };
-   }
 
-   const hashedPassword = this.encryptions.encrypt(newData.password);
+      if(!user){
+        return { success: false, message: "Id inválido." };
+      }
 
-   Object.assign(user, newData);
+      if(Number(user.id) != id || user.id == null){
+        return { success: false, message: "Id inválido." };
+      }
 
-   const newUser: UserEntity = {
-    id: Number(user.id),
-    name: user.name,
-    password: hashedPassword,
-    email: user.email
-   }
+      const hashedPassword = this.encryptions.encrypt(newData.password);
 
-   await this.userRepository.updateUser(newUser);
+      Object.assign(user, newData);
 
-  return { success: true, user: newData };
-}
+      const newUser: UserEntity = {
+        id: Number(user.id),
+        name: user.name,
+        password: hashedPassword,
+        email: user.email
+      }
+
+      await this.userRepository.updateUser(newUser);
+
+      return { success: true, user: newData };
+    }
+
+
 }

@@ -1,10 +1,10 @@
-/*import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import UserEntity from "./UserEntity";
 
 @Entity()
 export default class  SpacedRepetitionEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
   @ManyToOne(() => UserEntity, (user) => user.spacedRepetition)
   user: UserEntity;
   @Column()
@@ -22,7 +22,9 @@ export default class  SpacedRepetitionEntity {
   @Column()
   upToOneMonth: Date;
   @Column()
-  upToTwoSixMonths: Date;
+  upToTwoMonths: Date;
+  @Column()
+  upToSixMonths: Date;
   @Column()
   active: boolean;
 
@@ -35,7 +37,8 @@ export default class  SpacedRepetitionEntity {
     mediumTerm: Date,
     longTerm: Date,
     upToOneMonth: Date,
-    upToTwoSixMonths: Date,
+    upToTwoMonths: Date,
+    upToSixMonths: Date,
     active: boolean
   ) {
     this.user = user;
@@ -46,11 +49,12 @@ export default class  SpacedRepetitionEntity {
     this.mediumTerm = mediumTerm;
     this.longTerm = longTerm;
     this.upToOneMonth = upToOneMonth;
-    this.upToTwoSixMonths = upToTwoSixMonths;
+    this.upToTwoMonths = upToTwoMonths;
+    this.upToSixMonths = upToSixMonths;
     this.active = active;
   }
 
 
 
 }
-*/
+
