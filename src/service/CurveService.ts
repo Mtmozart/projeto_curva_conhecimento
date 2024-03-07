@@ -1,36 +1,60 @@
 import CreateCurveDTO from "../DTO/curveDTO/CreateCurveDTOS";
+import SpacedRepetitionEntity from "../entities/SpacedRepetitionEntity";
+import UserRepository from "../repositories/UserRepository";
 
 export default class CurseService {
-  constructor() {
-    this.createDatesCurve = this.createDatesCurve.bind(this);
+
+  constructor(private userRepository: UserRepository){
+
   }
 
-  async create(fields: CreateCurveDTO) {
-    const curve = await this.createDatesCurve(fields.firstStudy);
-    return curve;
+    async create(fields: CreateCurveDTO) {
+
+      const firstRevisionCourtTerm =  this.createDatesCurve(fields.firstStudy, 15, "minutes");
+      const mediumTerm =  this.createDatesCurve(fields.firstStudy, 1, "day");
+      const longTerm = this.createDatesCurve(fields.firstStudy, 7, "day");
+      const upToOneMonth = this.createDatesCurve(fields.firstStudy, 1, "month");
+      const upToTwoMonth = this.createDatesCurve(fields.firstStudy, 2, "month");
+      const upToThreeMonth = this.createDatesCurve(fields.firstStudy, 3, "month");
+
+      const{ user } = await this.userRepository.findUserById(fields.userId);
+      const userEntt = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }
+
+
+      const newCurve: SpacedRepetitionEntity = {
+        user: userEntt,
+        title: fields.title,
+        description: fields.description,
+        firstStudy: fields.firstStudy,
+        mediumfirstRevisionCourtTermTerm: firstRevisionCourtTerm,
+        mediumTerm: mediumTerm,
+        longTerm: longTerm,
+        upToOneMonth: upToOneMonth,
+        upToTwoMonths: upToTwoMonth,
+        upToThreeMonths: upToThreeMonth,
+        active: true
+
+      }
+
   }
 
-  private createDatesCurve(date: Date): Date[] {
-    const firstRevisionCourtTerm = new Date(date);
-    firstRevisionCourtTerm.setMinutes(date.getMinutes() + 15);
-    const mediumTerm = new Date(date);
-    mediumTerm.setDate(date.getDate() + 1);
-    const longTerm = new Date(date);
-    longTerm.setDate(date.getDate() + 7);
-    const upToOneMonth = new Date(date);
-    upToOneMonth.setMonth(date.getMonth() + 1);
-    const upToTwoMonth = new Date(date);
-    upToTwoMonth.setMonth(date.getMonth() + 2);
-    const upToThreeMonth = new Date(date);
-    upToThreeMonth.setMonth(date.getMonth() + 3);
+  private createDatesCurve(date: Date, lapse: number, type: string): Date {
+    let revision: Date = new Date(date);
 
-    return [
-      firstRevisionCourtTerm,
-      mediumTerm,
-      longTerm,
-      upToOneMonth,
-      upToTwoMonth,
-      upToThreeMonth,
-    ];
-  }
+    if (type === "minutes") {
+      revision.setMinutes(revision.getMinutes() + lapse);
+    } else if (type === "day") {
+      revision.setDate(revision.getDate() + lapse);
+    } else if (type === "month") {
+      revision.setMonth(revision.getMonth() + lapse);
+    }
+
+
+    return revision;
+
+    }
 }

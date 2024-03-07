@@ -11,7 +11,7 @@ export default class CreateUserDTO{
   upToOneMonth: Date;
   upToTwoMonths: Date;
   upToThreeMonths: Date;
-  active: true;
+  active: boolean;
 
   constructor(title: string, description: string, firstStudy: Date, firstRevisionCourtTerm: Date,
    mediumTerm: Date, upToOneMonth: Date, upToTwoMonths: Date, upToThreeMonths: Date
@@ -25,6 +25,7 @@ export default class CreateUserDTO{
     this.upToOneMonth = upToOneMonth;
     this.upToTwoMonths = upToTwoMonths;
     this.upToThreeMonths = upToThreeMonths;
+    this.active = true;
 
   }
 

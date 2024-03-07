@@ -1,18 +1,15 @@
-import UserEntity from "../../entities/UserEntity";
 
 export default class CreateCurveDTO{
 
+  userId: number;
   title: string;
- // user: UserEntity;
   description: string;
   firstStudy: Date;
 
-  constructor(title: string, description: string, firstStudy: Date){
+  constructor(userId: number, title: string, description: string, firstStudy: Date){
+    this.userId = userId;
     this.title = title;
     this.description = description;
     this.firstStudy = firstStudy;
-
-
   }
-
 }
