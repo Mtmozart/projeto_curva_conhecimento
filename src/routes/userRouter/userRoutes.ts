@@ -12,7 +12,6 @@ const userRepository = new UserRepository(
   AppDataSource.getRepository("UserEntity")
 );
 
-
 const userController = new UserController(userRepository);
 
 const authM = new AuthMiddleware();

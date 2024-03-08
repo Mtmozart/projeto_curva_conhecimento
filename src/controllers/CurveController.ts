@@ -1,25 +1,34 @@
 import { Request, Response } from 'express'
 import CurseService from '../service/CurveService.js'
+import CurveRepository from '../repositories/CurveRepository.js';
+import UserRepository from '../repositories/UserRepository.js';
 
 
 export default class CurveController {
 
-  private service: CurseService;
+  private curseService: CurseService;
 
-  constructor() {
-    this.service = new CurseService();
+  constructor(private curveRepository: CurveRepository, private userRepository: UserRepository,) {
+    this.curseService = new CurseService(userRepository, curveRepository);
   }
+
+
 async create(req: Request, res: Response){
   try {
-    const today = new Date();
 
-   const date = await this.service.create({
-      title: "algo aleatório",
-      description: "uma descrição",
-      firstStudy: today,
-    })
+    const { id } = req.params
+    const { title, description, firstStudy} = req.body;
+    console.log(id, title, description, firstStudy)
+   const firstStudyDate = new Date(firstStudy)
 
-    res.json({date})
+    const dateCurve = await this.curseService.create({
+        userId: Number(id),
+        title: title,
+        description: description,
+        firstStudy: firstStudyDate,
+      })
+
+   return res.json({message: "sucesso"})
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Erro interno no servidor' });

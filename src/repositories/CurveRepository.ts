@@ -12,8 +12,8 @@ export default class CurveRepository implements ICurveRepository{
 
   async create(curve: SpacedRepetitionEntity): Promise<{ newCurve: SpacedRepetitionEntity; }> {
    try {
-     const newCurve = await this.repository.create(curve);
-     return { newCurve }
+    const newCurve = await this.repository.create(curve);
+    return {newCurve};
    } catch (error) {
     throw new Error(error);
    }

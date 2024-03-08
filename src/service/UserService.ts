@@ -74,20 +74,24 @@ export default class UserService {
     return { success: true, user: userLogin }
   }
 
-
-
   async details(id: number): Promise<{
     success: boolean;
     message?: string;
-    user?: UserDetailsDTO;
+    userResponse?: UserDetailsDTO;
 }> {
     const { user } = await this.userRepository.findUserById(id);
 
     if (!user) {
         return { success: false, message: "Id inválido." };
     }
+   const userResponse: UserDetailsDTO = {
+     id: user.id.toString(),
+     name: user.name,
+     email: user.email
 
-    return { success: true, user };
+    }
+
+    return { success: true, userResponse };
 }
 
     async update(id: number, token: string, newData: UpdateUserDTO): Promise<{

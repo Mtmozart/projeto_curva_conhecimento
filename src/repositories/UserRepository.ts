@@ -62,7 +62,7 @@ export default class UserRepository implements IUserRepository{
       }
     }
 
-    async findUserById(id: number): Promise<{ user: UserDetailsDTO | null; }> {
+    async findUserById(id: number): Promise<{ user: UserEntity | null; }> {
 
       try {
         const findUser: UserEntity = await this.repository.findOneBy({
@@ -74,7 +74,7 @@ export default class UserRepository implements IUserRepository{
        }
 
        const user = {
-        id: findUser.id.toString(),
+        id: findUser.id,
         name: findUser.name,
         email: findUser.email,
         password: findUser.password

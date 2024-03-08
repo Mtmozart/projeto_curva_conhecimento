@@ -22,7 +22,6 @@ export default class UserController {
   constructor(private userRepository: UserRepository) {
     this.userService = new UserService(userRepository);
   }
-
 async createUser(req: Request, res: Response) {
   try {
     const dados: CreateUserDTO = req.body;
@@ -102,8 +101,8 @@ async createUser(req: Request, res: Response) {
     }
 
     return res.status(200).json({
-      name: user.user.name,
-      email: user.user.email,
+      name: user.userResponse.name,
+      email: user.userResponse.email,
     });
 
   }
