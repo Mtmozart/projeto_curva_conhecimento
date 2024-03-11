@@ -12,12 +12,12 @@ export default class CurseService {
 
     async create(fields: CreateCurveDTO) {
 
-      const firstRevisionCourtTerm =  this.createDatesCurve(fields.firstStudy, 15, "minutes");
-      const mediumTerm =  this.createDatesCurve(fields.firstStudy, 1, "day");
-      const longTerm = this.createDatesCurve(fields.firstStudy, 7, "day");
-      const upToOneMonth = this.createDatesCurve(fields.firstStudy, 1, "month");
-      const upToTwoMonth = this.createDatesCurve(fields.firstStudy, 2, "month");
-      const upToThreeMonth = this.createDatesCurve(fields.firstStudy, 3, "month");
+      const firstRevisionCourtTerm = await this.createDatesCurve(fields.firstStudy, 15, "minutes");
+      const mediumTerm = await this.createDatesCurve(fields.firstStudy, 1, "day");
+      const longTerm = await this.createDatesCurve(fields.firstStudy, 7, "day");
+      const upToOneMonth = await this.createDatesCurve(fields.firstStudy, 1, "month");
+      const upToTwoMonth = await this.createDatesCurve(fields.firstStudy, 2, "month");
+      const upToThreeMonth = await this.createDatesCurve(fields.firstStudy, 3, "month");
       const { user } = await this.userRepository.findUserById(fields.userId);
       const newCurve: SpacedRepetitionEntity = {
         user: user,
@@ -32,8 +32,10 @@ export default class CurseService {
         upToThreeMonths: upToThreeMonth,
         active: true
       }
+
       const savedCurve = await this.curveRepository.create(newCurve);
-      return savedCurve;
+
+      return savedCurve.newCurve;
   }
 
   private createDatesCurve(date: Date, lapse: number, type: string): Date {

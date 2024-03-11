@@ -18,9 +18,7 @@ async create(req: Request, res: Response){
 
     const { id } = req.params
     const { title, description, firstStudy} = req.body;
-    console.log(id, title, description, firstStudy)
-   const firstStudyDate = new Date(firstStudy)
-
+    const firstStudyDate = new Date(firstStudy)
     const dateCurve = await this.curseService.create({
         userId: Number(id),
         title: title,
@@ -28,7 +26,7 @@ async create(req: Request, res: Response){
         firstStudy: firstStudyDate,
       })
 
-   return res.json({message: "sucesso"})
+   return res.json({curve: dateCurve})
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Erro interno no servidor' });
