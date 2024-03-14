@@ -5,6 +5,7 @@ import UserRepository from "../repositories/UserRepository";
 
 export default class CurseService {
 
+
   constructor(private userRepository: UserRepository, private curveRepository: CurveRepository){
     this.userRepository = userRepository,
     this.curveRepository = curveRepository
@@ -19,6 +20,7 @@ export default class CurseService {
       const upToTwoMonth = await this.createDatesCurve(fields.firstStudy, 2, "month");
       const upToThreeMonth = await this.createDatesCurve(fields.firstStudy, 3, "month");
       const { user } = await this.userRepository.findUserById(fields.userId);
+
       const newCurve: SpacedRepetitionEntity = {
         user: user,
         title: fields.title,
@@ -51,6 +53,14 @@ export default class CurseService {
 
 
     return revision;
+
+    }
+
+   async details(userId: number, curveId: number) {
+
+      const { user } = await this.userRepository.findUserById(userId);
+
+      const curve = this.curveRepository.details(curveId);
 
     }
 }

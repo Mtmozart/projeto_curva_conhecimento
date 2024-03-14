@@ -4,6 +4,7 @@ import { ICurveRepository } from "./interfaces/ICurveRepository";
 
 export default class CurveRepository implements ICurveRepository{
 
+
   private repository:Repository<SpacedRepetitionEntity>;
 
   constructor(repository: Repository<SpacedRepetitionEntity>){
@@ -17,6 +18,10 @@ export default class CurveRepository implements ICurveRepository{
    } catch (error) {
     throw new Error(error);
    }
+  }
+
+  details(curveId: number) {
+    throw new Error("Method not implemented.");
   }
 
 }

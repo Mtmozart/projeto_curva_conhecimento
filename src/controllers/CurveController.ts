@@ -32,4 +32,19 @@ async create(req: Request, res: Response){
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 }
+
+
+    async details(req: Request, res: Response){
+
+      try {
+        const { userId, curveId } = req.params
+        const curve = await this.curseService.details({
+          userId: Number(userId),
+          curveId: Number(curveId)
+        })
+      } catch (error) {
+
+      }
+
+    }
 }
