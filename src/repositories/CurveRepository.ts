@@ -20,8 +20,19 @@ export default class CurveRepository implements ICurveRepository{
    }
   }
 
-  details(curveId: number) {
-    throw new Error("Method not implemented.");
+  async findCurveById(id: number): Promise<{ curve: SpacedRepetitionEntity | null }> {
+    try{
+      const findCurve: SpacedRepetitionEntity  = await this.repository.findOneBy({id: id})
+      if(!findCurve){
+        return {curve: null };
+      }
+      return {curve: findCurve}
+
+
+    }catch(error){
+      throw new Error(error);
+    }
   }
+
 
 }

@@ -1,4 +1,6 @@
 import CreateCurveDTO from "../DTO/curveDTO/CreateCurveDTOS";
+import CurveDetailDTO from "../DTO/curveDTO/CurveDetailDTO";
+import CurveDetailDTO from "../DTO/curveDTO/CurveDetailDTO";
 import SpacedRepetitionEntity from "../entities/SpacedRepetitionEntity";
 import CurveRepository from "../repositories/CurveRepository";
 import UserRepository from "../repositories/UserRepository";
@@ -56,11 +58,24 @@ export default class CurseService {
 
     }
 
-   async details(userId: number, curveId: number) {
+   async details(userId: number, curveId: number): Promise<{
+    success: boolean;
+    message?: string;
+    curve?: CurveDetailDTO;
+}> {
 
       const { user } = await this.userRepository.findUserById(userId);
+      if(!user){
+        return {success: false}
+      }
+      const curve = this.curveRepository.findCurveById(curveId);
+      if(!curve){
+        return {success: false}
+      }
+      const curveDetailDTO = new CurveDetailDTO(curve)
 
-      const curve = this.curveRepository.details(curveId);
+      return {success: true, curve: curveDetailDTO}
+
 
     }
 }
