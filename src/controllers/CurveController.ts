@@ -26,7 +26,7 @@ async create(req: Request, res: Response){
         firstStudy: firstStudyDate,
       })
 
-   return res.json({curve: dateCurve})
+   return res.status(201).json({curve: dateCurve})
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Erro interno no servidor' });
@@ -41,6 +41,21 @@ async create(req: Request, res: Response){
         const curve = await this.curveService.details(Number(userId),
           Number(curveId)
         );
+
+        res.status(200).json({curve: curve})
+      } catch (error) {
+        res.status(500).json({ error: 'Erro interno no servidor' });
+      }
+
+    }
+
+    async allCurveByUser(req: Request, res: Response){
+
+      try {
+        const { userId } = req.params
+        const {curves }= await this.curveService.allCurveByUser(Number(userId));
+
+        res.status(200).json({curves: curves})
       } catch (error) {
         res.status(500).json({ error: 'Erro interno no servidor' });
       }

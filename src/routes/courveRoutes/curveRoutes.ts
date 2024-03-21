@@ -16,8 +16,14 @@ const userRepository = new UserRepository(
 const curveController = new CurveController(curveRepository, userRepository);
 const authM = new AuthMiddleware();
 
-router.get("/user/:id/create", authM.authMiddleware, (req, res) => {
+router.post("/user/:id/create", authM.authMiddleware, (req, res) => {
   curveController.create(req, res)
+});
+router.get("/user/:userId/curve/:curveId", authM.authMiddleware, (req, res) => {
+  curveController.details(req, res)
+});
+router.get("/user/:userId/curves", authM.authMiddleware, (req, res) => {
+  curveController.details(req, res)
 });
 
 
