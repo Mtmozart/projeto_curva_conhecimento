@@ -41,20 +41,20 @@ export default class CurveRepository implements ICurveRepository{
 
   async findAllByUser(user: UserEntity): Promise<{ curves: SpacedRepetitionEntity[]; }> {
     try {
-      const curve: SpacedRepetitionEntity[] = await this.repository.find({
+      const curves: SpacedRepetitionEntity[] = await this.repository.find({
         where: {
-            user: user
-        }
+          user: user// Convertendo para número, se necessário
+      }
      });
 
-      if(!curve.length){
+      if(!curves.length){
           return {curves: []};
         }
 
-        return {curves: curve};
+        return {curves: curves};
 
     } catch (error) {
-      throw new Error(error);
+       throw new Error(error);
     }
   }
 

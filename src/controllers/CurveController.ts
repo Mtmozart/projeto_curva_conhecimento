@@ -53,11 +53,11 @@ async create(req: Request, res: Response){
 
       try {
         const { userId } = req.params
-        const {curves }= await this.curveService.allCurveByUser(Number(userId));
+        const { curves }= await this.curveService.allCurveByUser(Number(userId));
 
         res.status(200).json({curves: curves})
       } catch (error) {
-        res.status(500).json({ error: 'Erro interno no servidor' });
+        res.status(500).json({ error: 'Erro interno no servidor: ' + error });
       }
 
     }

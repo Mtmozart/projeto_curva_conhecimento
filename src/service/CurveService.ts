@@ -88,9 +88,27 @@ export default class CurseService {
       if(!user){
         return {success: false}
       }
-      const { curves }= await this.curveRepository.findAllByUser(user);
+      const { curves } = await this.curveRepository.findAllByUser(user);
 
-      return { success: true, curves: curves}
+
+      let curvesResponse: CurveDetailDTO[] = [];
+
+      curvesResponse = curves.map(c => ({
+        userId: c.user.id,
+        title: c.title,
+        description: c.description,
+        firstStudy: c.firstStudy,
+        firstRevisionCourtTerm: c.firstRevisionCourtTerm,
+        mediumTerm: c.mediumTerm,
+        longTerm: c.longTerm,
+        upToOneMonth: c.upToOneMonth,
+        upToTwoMonths: c.upToTwoMonths,
+        upToThreeMonths: c.upToThreeMonths,
+        active: c.active
+    }));
+
+    console.log(curvesResponse)
+      return { success: true, curves: curvesResponse}
 
     }
 }

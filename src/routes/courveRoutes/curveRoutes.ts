@@ -23,7 +23,7 @@ router.get("/user/:userId/curve/:curveId", authM.authMiddleware, (req, res) => {
   curveController.details(req, res)
 });
 router.get("/user/:userId/curves", authM.authMiddleware, (req, res) => {
-  curveController.details(req, res)
+  curveController.allCurveByUser(req, res)
 });
 
 
