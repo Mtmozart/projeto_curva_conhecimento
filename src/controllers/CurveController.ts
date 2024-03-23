@@ -61,4 +61,14 @@ async create(req: Request, res: Response){
       }
 
     }
+
+    async delete(req: Request, res: Response){
+      const { userId, curveId } = req.params
+      const curve = await this.curveService.delete(Number(userId),
+          Number(curveId)
+        );
+
+    }
+
+
 }

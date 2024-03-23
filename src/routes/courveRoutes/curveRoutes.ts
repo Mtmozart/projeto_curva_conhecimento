@@ -26,5 +26,9 @@ router.get("/user/:userId/curves", authM.authMiddleware, (req, res) => {
   curveController.allCurveByUser(req, res)
 });
 
+router.patch("/user/:userId/curve/:curveId", authM.authMiddleware, (req, res) => {
+  curveController.allCurveByUser(req, res)
+});
+
 
 export default router

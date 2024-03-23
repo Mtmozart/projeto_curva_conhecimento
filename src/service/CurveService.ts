@@ -106,9 +106,24 @@ export default class CurseService {
         upToThreeMonths: c.upToThreeMonths,
         active: c.active
     }));
-
-    console.log(curvesResponse)
       return { success: true, curves: curvesResponse}
 
     }
+
+    async delete(userId: number, curveId: number): Promise<{
+      success: boolean;
+      message?: string;
+     }> {
+
+      const { user } = await this.userRepository.findUserById(userId);
+      if(!user){
+        return {success: false}
+      }
+      const curveDelete = await this.curveRepository.delete(id);
+      if( curveDelete.success == true){
+        return {success: true, message: "Curve deletada com sucesso."}
+      }
+      return {success: false};
+    }
+
 }

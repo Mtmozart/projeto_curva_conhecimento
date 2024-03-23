@@ -9,13 +9,9 @@ export default class CurveRepository implements ICurveRepository{
 
 
   private repository:Repository<SpacedRepetitionEntity>;
-  private userRepository:Repository<UserRepository>;
-
-  constructor(repository: Repository<SpacedRepetitionEntity>){
+   constructor(repository: Repository<SpacedRepetitionEntity>){
     this.repository = repository;
    }
-
-
   async create(curve: SpacedRepetitionEntity): Promise<{ newCurve: SpacedRepetitionEntity; }> {
    try {
     const newCurve = await this.repository.save(curve);
@@ -58,6 +54,15 @@ export default class CurveRepository implements ICurveRepository{
     }
   }
 
+  async delete(id: number): Promise<{ success: boolean; }> {
+  try {
+      const curve = await this.repository.findOneBy({id: id})
+      curve.active = false;
+      return { success: true }
+  } catch (error) {
+    throw new Error(error);
+  }
+  }
 
 
 }
