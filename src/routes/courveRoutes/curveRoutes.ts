@@ -30,5 +30,9 @@ router.patch("/user/:userId/curve/:curveId", authM.authMiddleware, (req, res) =>
   curveController.allCurveByUser(req, res)
 });
 
+router.delete("/user/:userId/curve/:curveId", authM.authMiddleware, (req, res) => {
+  curveController.delete(req, res)
+});
+
 
 export default router

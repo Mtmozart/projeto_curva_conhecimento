@@ -12,10 +12,9 @@ export default class CurveDetailDTO{
   upToTwoMonths: Date;
   upToThreeMonths: Date;
   active: boolean;
-  userId?: Number;
+  user: UserEntity;
 
   constructor(curve: SpacedRepetitionEntity ){
-    this.userId = curve.user.id;
     this.title = curve.title;
     this.description = curve.description;
     this.firstStudy = curve.firstStudy;
@@ -25,7 +24,7 @@ export default class CurveDetailDTO{
     this.upToOneMonth = curve.upToOneMonth;
     this.upToTwoMonths = curve.upToTwoMonths;
     this.upToThreeMonths = curve.upToThreeMonths;
-    this.userId = curve.user.id;
+    this.user = curve.user;
    }
 
 }

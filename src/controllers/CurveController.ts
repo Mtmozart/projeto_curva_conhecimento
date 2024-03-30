@@ -44,6 +44,7 @@ async create(req: Request, res: Response){
 
         res.status(200).json({curve: curve})
       } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Erro interno no servidor' });
       }
 
@@ -63,10 +64,21 @@ async create(req: Request, res: Response){
     }
 
     async delete(req: Request, res: Response){
-      const { userId, curveId } = req.params
-      const curve = await this.curveService.delete(Number(userId),
-          Number(curveId)
-        );
+
+      try {
+        const { userId, curveId } = req.params
+        const curve = await this.curveService.delete(Number(userId),
+            Number(curveId)
+          );
+
+          if(!curve.success){
+            res.status(500).json({message: "Erro ao deletar a curva."})
+          }
+          res.status(204).json({message: "Curva deletada com sucesso."})
+
+      } catch (error) {
+        res.status(500).json({ error: 'Erro interno no servidor: ' + error });
+      }
 
     }
 

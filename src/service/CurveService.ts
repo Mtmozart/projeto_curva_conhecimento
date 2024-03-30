@@ -69,7 +69,7 @@ export default class CurseService {
         return {success: false}
       }
       const {curve} = await this.curveRepository.findCurveById(curveId);
-      if(!curve){
+       if(curve == null){
         return {success: false}
       }
 
@@ -94,7 +94,7 @@ export default class CurseService {
       let curvesResponse: CurveDetailDTO[] = [];
 
       curvesResponse = curves.map(c => ({
-        userId: c.user.id,
+        user: c.user,
         title: c.title,
         description: c.description,
         firstStudy: c.firstStudy,
@@ -119,9 +119,12 @@ export default class CurseService {
       if(!user){
         return {success: false}
       }
-      const curveDelete = await this.curveRepository.delete(id);
+
+      const {curve} = await this.curveRepository.findCurveById(curveId);
+      const curveDelete = await this.curveRepository.delete(curve.id);
+
       if( curveDelete.success == true){
-        return {success: true, message: "Curve deletada com sucesso."}
+        return {success: true, message: "Curva deletada deletada com sucesso."}
       }
       return {success: false};
     }
